@@ -1,0 +1,33 @@
+services:
+  clickhouse-server:
+    image: clickhouse/clickhouse-server:latest 
+    container_name: chipchip-clickhouse
+    ports:
+      - "8123:8123" # HTTP interface
+      - "9000:9000" # Native client interface
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse/
+      - ./data/init_db.sh:/docker-entrypoint-initdb.d/init_db.sh
+
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "localhost:8123/ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  clickhouse-client:
+    image: clickhouse/clickhouse-client:latest
+    container_name: chipchip-clickhouse-client
+    entrypoint: /bin/sleep
+    command: infinity
+    depends_on:
+      - clickhouse-server
+    ports:
+      - "9000:9000"
+
+volumes:
+  clickhouse_data: # Persists ClickHouse data
