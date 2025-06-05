@@ -41,6 +41,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
   app:
     build:
       context: .
@@ -52,7 +53,7 @@ services:
       - ./src:/app/src 
       - ./data:/app/data 
     env_file:
-      - .env
+      - ./src/.env
     depends_on:
       clickhouse-server:
         condition: service_healthy
