@@ -1,7 +1,9 @@
 # Technical Proposal: ChipChip AI Marketing Agent
 
 **Author:** Abdulmunim Jundurahman
+
 **Date:** June 5, 2025
+
 **Project:** Take-Home Assessment for AI Agent Developer Role
 
 ## 1. Chosen Approach & Rationale
@@ -26,7 +28,8 @@ The agent's reasoning process is broken down into three distinct, specialized st
 
 The following diagram illustrates the flow of a user request through the system, from the client to the various backend components and back.
 
-[I will include the image here]
+![Seqeuence Diagram](https://github.com/user-attachments/assets/84e3acf5-7f2e-4cf5-8687-9a655c738f98)
+
 
 ## 3. Technology Stack
 
