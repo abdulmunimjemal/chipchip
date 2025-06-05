@@ -53,7 +53,7 @@ services:
       - ./src:/app/src 
       - ./data:/app/data 
     env_file:
-      - ./src/.env
+      - .env
     depends_on:
       clickhouse-server:
         condition: service_healthy

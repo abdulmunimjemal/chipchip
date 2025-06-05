@@ -22,10 +22,9 @@ app.add_middleware(
 
 app.include_router(chat_router.router, prefix=settings.API_PREFIX, tags=["Chat Agent"])
 
-
 @app.get("/", tags=["Root"])
 async def read_root():
-    return {"message": f"Welcome to {settings.APP_NAME}! Visit /docs for API details."}
+    return {"message": f"Welcome to {settings.APP_NAME}! Visit {settings.API_PREFIX}/docs for API details."}
 
 if __name__ == "__main__":
     import uvicorn
