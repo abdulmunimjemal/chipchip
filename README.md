@@ -70,7 +70,7 @@ GOOGLE_API_KEY="YOUR_GOOGLE_AI_API_KEY_HERE"
 
 # --- LLM Model ---
 # Use the latest stable model or a specific preview you have access to
-LLM_MODEL_NAME="models/gemini-1.5-flash-latest"
+LLM_MODEL_NAME="models/gemini-2.5-flash-preview-04-17" 
 
 # --- Docker Service Names (Do not change unless you edit docker-compose.yml) ---
 CLICKHOUSE_HOST="clickhouse-server"
