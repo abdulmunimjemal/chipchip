@@ -29,5 +29,48 @@ services:
     depends_on:
       - clickhouse-server
   
+  redis:
+    image: redis:alpine
+    container_name: chipchip-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile 
+    container_name: chipchip-fastapi-app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./src:/app/src 
+      - ./data:/app/data 
+    env_file:
+      - .env
+    depends_on:
+      clickhouse-server:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment: 
+      - PYTHONUNBUFFERED=1 
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY}
+      - CLICKHOUSE_HOST=clickhouse-server
+      - CLICKHOUSE_PORT=${CLICKHOUSE_PORT:-8123}
+      - CLICKHOUSE_USERNAME=${CLICKHOUSE_USERNAME:-default}
+      - CLICKHOUSE_PASSWORD=${CLICKHOUSE_PASSWORD}
+      - CLICKHOUSE_DATABASE=${CLICKHOUSE_DATABASE:-chipchip_db}
+      - REDIS_HOST=redis
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - LLM_MODEL_NAME=${LLM_MODEL_NAME:-models/gemini-1.5-flash-latest}
+
 volumes:
-  clickhouse_data: # Persists ClickHouse data
+  clickhouse_data:
+  redis_data:
