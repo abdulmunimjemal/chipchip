@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Body, Depends
 from typing import Annotated
 
-from src.schemas.chat_schemas import ChatRequest, ChatResponse, SQLDebugInfo
+from src.schemas.chat_schemas import ChatRequest, ChatResponse, SQLDebugInfo, ChartData
 from src.services.agent_service import agent_service # Singleton instance
 
 router = APIRouter()
@@ -21,8 +21,12 @@ async def ask_question(
     Receives a natural language question and a session_id, processes it using the AI agent,
     and returns the answer along with debug information.
     """
+
+    if not agent_service: # safety check
+        raise HTTPException(status_code=503, detail="Service Unavailable: AI Agent components are not initialized.")
+
     try:
-        answer, sql_debug, error = await agent_service.process_question(
+        answer, chart_data, sql_debug, error = await agent_service.process_question(
             question=request_body.question,
             session_id=request_body.session_id
         )
@@ -32,6 +36,7 @@ async def ask_question(
                 session_id=request_body.session_id,
                 question=request_body.question,
                 answer=answer,
+                chart_data=chart_data, 
                 debug_info=sql_debug,
                 error=error
             )
@@ -39,6 +44,7 @@ async def ask_question(
             session_id=request_body.session_id,
             question=request_body.question,
             answer=answer,
+            chart_data=chart_data, 
             debug_info=sql_debug
         )
 
